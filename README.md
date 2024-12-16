@@ -20,7 +20,7 @@ QuoteAPI is a simple and efficient RESTful API for managing quotes, built using 
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/ZodiackiIler/QuoteAPI.git
+   git clone https://github.com/TenebraeFox/QuoteAPI.git
    cd QuoteAPI
    ```
 
