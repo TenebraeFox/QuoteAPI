@@ -1,40 +1,37 @@
-name: Run Tests
+name: Python application
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v4  # Checkout the code
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
       with:
-        python-version: '3.9'  # Specify the Python version you want
+        python-version: "3.10"  # You can update this to the Python version of your choice
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest
+        pip install -r requirements.txt  # Install dependencies from requirements.txt
+        pip install pytest  # Install pytest for running tests
 
-    - name: Run tests
+    - name: Run tests for main.py
       run: |
-        pytest test_main.py
-        pytest test_init_db.py
+        pytest test_main.py  # Run tests for the FastAPI app
 
-    - name: Upload test results to GitHub
-      if: always()
-      uses: github-actions/upload-artifact@latest
-      with:
-        name: test-results
-        path: test_main.py
+    - name: Run tests for init_db.py
+      run: |
+        pytest test_init_db.py  # Run tests for database functions
