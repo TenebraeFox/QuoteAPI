@@ -34,7 +34,7 @@ jobs:
 
     - name: Upload test results to GitHub
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: github-actions/upload-artifact@latest
       with:
         name: test-results
         path: test_main.py
