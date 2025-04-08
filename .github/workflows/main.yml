@@ -10,7 +10,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout name: Python Tests
+
+on:
+  push:
+    branches:
+      - main  # Change this to the default branch of your repository
+  pull_request:
+    branches:
+      - main  # Runs tests on pull request events
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # You can change this to windows-latest or macos-latest if needed
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Specify the Python version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      # Step 4: Run the tests
+      - name: Run tests
+        run: |
+          pytest test_main.py
+          pytest test_init_db.py
+
         uses: actions/checkout@v2
 
       - name: Set up Python
