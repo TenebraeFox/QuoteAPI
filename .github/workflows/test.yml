@@ -1,316 +1,40 @@
-name: Quote API Requests
+name: Run Tests
 
 on:
   push:
     branches:
       - main
-
-jobs:
-  random_quote:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout name: Python Tests
-
-on:
-  push:
-    branches:
-      - main  # Change this to the default branch of your repository
   pull_request:
     branches:
-      - main  # Runs tests on pull request events
+      - main
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # You can change this to windows-latest or macos-latest if needed
-
-    steps:
-      # Step 1: Check out the code from the repository
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # Step 2: Set up Python
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'  # Specify the Python version
-
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest
-
-      # Step 4: Run the tests
-      - name: Run tests
-        run: |
-          pytest test_main.py
-          pytest test_init_db.py
-
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-
-      - name: Start the application
-        run: |
-          source venv/bin/activate  # Активируем виртуальное окружение
-          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
-
-      - name: Wait for the server to start
-        run: |
-          # Ждем, пока сервер не станет доступен
-          until curl -s http://127.0.0.1:8000; do
-            echo "Ожидаем запуск сервера..."
-            sleep 2
-          done
-
-      - name: Get Random Quote (Test GET)
-        run: |
-          response=$(curl -s -w "%{http_code}" -X GET "http://127.0.0.1:8000/random_quote" -H "Accept: application/json")
-          if [[ "${response: -3}" != "200" ]]; then exit 1; fi
-
-  add_quote_valid_token:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'  # Specify the Python version you want
 
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest
 
-      - name: Start the application
-        run: |
-          source venv/bin/activate  # Активируем виртуальное окружение
-          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+    - name: Run tests
+      run: |
+        pytest test_main.py
+        pytest test_init_db.py
 
-      - name: Wait for the server to start
-        run: |
-          # Ждем, пока сервер не станет доступен
-          until curl -s http://127.0.0.1:8000; do
-            echo "Ожидаем запуск сервера..."
-            sleep 2
-          done
-
-      - name: Add Quote with Valid Token (Test POST)
-        run: |
-          response=$(curl -s -w "%{http_code}" -X POST "http://127.0.0.1:8000/add_quote" \
-            -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
-            -H "x-token: your_secret_token" \
-            -d '{"text": "Тестовая цитата для добавления.", "author": "Автор Теста", "theme": "Тест"}')
-          if [[ "${response: -3}" != "200" ]]; then exit 1; fi
-
-  add_quote_invalid_token:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-
-      - name: Start the application
-        run: |
-          source venv/bin/activate  # Активируем виртуальное окружение
-          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
-
-      - name: Wait for the server to start
-        run: |
-          # Ждем, пока сервер не станет доступен
-          until curl -s http://127.0.0.1:8000; do
-            echo "Ожидаем запуск сервера..."
-            sleep 2
-          done
-
-      - name: Add Quote with Invalid Token (Test POST)
-        run: |
-          response=$(curl -s -w "%{http_code}" -X POST "http://127.0.0.1:8000/add_quote" \
-            -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
-            -H "x-token: invalid_token" \
-            -d '{"text": "Тестовая цитата с неправильным токеном.", "author": "Автор Теста", "theme": "Тест"}')
-          if [[ "${response: -3}" != "401" ]]; then exit 1; fi
-
-  update_quote_valid_token:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-
-      - name: Start the application
-        run: |
-          source venv/bin/activate  # Активируем виртуальное окружение
-          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
-
-      - name: Wait for the server to start
-        run: |
-          # Ждем, пока сервер не станет доступен
-          until curl -s http://127.0.0.1:8000; do
-            echo "Ожидаем запуск сервера..."
-            sleep 2
-          done
-
-      - name: Update Quote with Valid Token (Test PUT)
-        run: |
-          response=$(curl -s -w "%{http_code}" -X PUT "http://127.0.0.1:8000/update_quote/1" \
-            -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
-            -H "x-token: your_secret_token" \
-            -d '{"text": "Обновленная тестовая цитата.", "author": "Обновленный Автор", "theme": "Обновленный Тест"}')
-          if [[ "${response: -3}" != "200" ]]; then exit 1; fi
-
-  update_quote_invalid_token:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-
-      - name: Start the application
-        run: |
-          source venv/bin/activate  # Активируем виртуальное окружение
-          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
-
-      - name: Wait for the server to start
-        run: |
-          # Ждем, пока сервер не станет доступен
-          until curl -s http://127.0.0.1:8000; do
-            echo "Ожидаем запуск сервера..."
-            sleep 2
-          done
-
-      - name: Update Quote with Invalid Token (Test PUT)
-        run: |
-          response=$(curl -s -w "%{http_code}" -X PUT "http://127.0.0.1:8000/update_quote/1" \
-            -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
-            -H "x-token: invalid_token" \
-            -d '{"text": "Тестовая цитата с неправильным токеном для обновления.", "author": "Автор Теста", "theme": "Тест"}')
-          if [[ "${response: -3}" != "401" ]]; then exit 1; fi
-
-  delete_quote_valid_token:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-
-      - name: Start the application
-        run: |
-          source venv/bin/activate  # Активируем виртуальное окружение
-          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
-
-      - name: Wait for the server to start
-        run: |
-          # Ждем, пока сервер не станет доступен
-          until curl -s http://127.0.0.1:8000; do
-            echo "Ожидаем запуск сервера..."
-            sleep 2
-          done
-
-      - name: Delete Quote with Valid Token (Test DELETE)
-        run: |
-          response=$(curl -s -w "%{http_code}" -X DELETE "http://127.0.0.1:8000/delete_quote/1" \
-            -H "Accept: application/json" \
-            -H "x-token: your_secret_token")
-          if [[ "${response: -3}" != "200" ]]; then exit 1; fi
-
-  delete_quote_invalid_token:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-
-      - name: Start the application
-        run: |
-          source venv/bin/activate  # Активируем виртуальное окружение
-          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
-
-      - name: Wait for the server to start
-        run: |
-          # Ждем, пока сервер не станет доступен
-          until curl -s http://127.0.0.1:8000; do
-            echo "Ожидаем запуск сервера..."
-            sleep 2
-          done
-
-      - name: Delete Quote with Invalid Token (Test DELETE)
-        run: |
-          response=$(curl -s -w "%{http_code}" -X DELETE "http://127.0.0.1:8000/delete_quote/1" \
-            -H "Accept: application/json" \
-            -H "x-token: invalid_token")
-          if [[ "${response: -3}" != "401" ]]; then exit 1; fi
+    - name: Upload test results to GitHub
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: test_main.py
