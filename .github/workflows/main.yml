@@ -26,7 +26,8 @@ jobs:
 
       - name: Start the application
         run: |
-          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+          source venv/bin/activate  # Активируем виртуальное окружение
+          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
         run: sleep 5  # Даем время серверу на запуск
@@ -56,7 +57,8 @@ jobs:
 
       - name: Start the application
         run: |
-          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+          source venv/bin/activate  # Активируем виртуальное окружение
+          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
         run: sleep 5  # Даем время серверу на запуск
@@ -90,7 +92,8 @@ jobs:
 
       - name: Start the application
         run: |
-          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+          source venv/bin/activate  # Активируем виртуальное окружение
+          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
         run: sleep 5  # Даем время серверу на запуск
@@ -124,7 +127,8 @@ jobs:
 
       - name: Start the application
         run: |
-          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+          source venv/bin/activate  # Активируем виртуальное окружение
+          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
         run: sleep 5  # Даем время серверу на запуск
@@ -158,7 +162,8 @@ jobs:
 
       - name: Start the application
         run: |
-          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+          source venv/bin/activate  # Активируем виртуальное окружение
+          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
         run: sleep 5  # Даем время серверу на запуск
@@ -192,7 +197,8 @@ jobs:
 
       - name: Start the application
         run: |
-          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+          source venv/bin/activate  # Активируем виртуальное окружение
+          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
         run: sleep 5  # Даем время серверу на запуск
@@ -224,7 +230,8 @@ jobs:
 
       - name: Start the application
         run: |
-          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+          source venv/bin/activate  # Активируем виртуальное окружение
+          uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
         run: sleep 5  # Даем время серверу на запуск
