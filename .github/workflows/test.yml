@@ -28,10 +28,10 @@ jobs:
         pip install -r requirements.txt  # Install dependencies from requirements.txt
         pip install pytest  # Install pytest for running tests
 
-    - name: Run tests for main.py
-      run: |
-        pytest test_main.py  # Run tests for the FastAPI app
-
     - name: Run tests for init_db.py
       run: |
         pytest test_init_db.py  # Run tests for database functions
+
+    - name: Run tests for main.py
+      run: |
+        pytest test_main.py  # Run tests for the FastAPI app
