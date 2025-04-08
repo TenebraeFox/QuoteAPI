@@ -1,0 +1,73 @@
+name: API Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python (for testing purposes if needed)
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Run API Tests
+        run: |
+          # Set up environment variables or use secrets for the token
+          SECRET_TOKEN="your_secret_token"
+          INVALID_TOKEN="invalid_token"
+          BASE_URL="http://127.0.0.1:8000"
+
+          # Test: GET Random Quote
+          echo "Running GET random_quote test"
+          curl -X GET "$BASE_URL/random_quote" -H "Accept: application/json"
+          
+          # Test: POST Add Quote (correct token)
+          echo "Running POST add_quote with correct token"
+          curl -X POST "$BASE_URL/add_quote" -H "Accept: application/json" -H "Content-Type: application/json" -H "x-token: $SECRET_TOKEN" -d '{
+            "text": "Тестовая цитата для добавления.",
+            "author": "Автор Теста",
+            "theme": "Тест"
+          }'
+
+          # Test: POST Add Quote (incorrect token)
+          echo "Running POST add_quote with incorrect token"
+          curl -X POST "$BASE_URL/add_quote" -H "Accept: application/json" -H "Content-Type: application/json" -H "x-token: $INVALID_TOKEN" -d '{
+            "text": "Тестовая цитата с неправильным токеном.",
+            "author": "Автор Теста",
+            "theme": "Тест"
+          }'
+
+          # Test: PUT Update Quote (correct token)
+          echo "Running PUT update_quote with correct token"
+          curl -X PUT "$BASE_URL/update_quote/1" -H "Accept: application/json" -H "Content-Type: application/json" -H "x-token: $SECRET_TOKEN" -d '{
+            "text": "Обновленная тестовая цитата.",
+            "author": "Обновленный Автор",
+            "theme": "Обновленный Тест"
+          }'
+
+          # Test: PUT Update Quote (incorrect token)
+          echo "Running PUT update_quote with incorrect token"
+          curl -X PUT "$BASE_URL/update_quote/1" -H "Accept: application/json" -H "Content-Type: application/json" -H "x-token: $INVALID_TOKEN" -d '{
+            "text": "Тестовая цитата с неправильным токеном для обновления.",
+            "author": "Автор Теста",
+            "theme": "Тест"
+          }'
+
+          # Test: DELETE Delete Quote (correct token)
+          echo "Running DELETE delete_quote with correct token"
+          curl -X DELETE "$BASE_URL/delete_quote/1" -H "Accept: application/json" -H "x-token: $SECRET_TOKEN"
+
+          # Test: DELETE Delete Quote (incorrect token)
+          echo "Running DELETE delete_quote with incorrect token"
+          curl -X DELETE "$BASE_URL/delete_quote/1" -H "Accept: application/json" -H "x-token: $INVALID_TOKEN"
