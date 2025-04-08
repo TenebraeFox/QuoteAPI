@@ -8,7 +8,11 @@ on:
 jobs:
   random_quote:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -16,11 +20,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
       - name: Start the application
         run: |
           nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Wait for the server to start
+        run: sleep 5  # Даем время серверу на запуск
 
       - name: Get Random Quote
         run: |
@@ -28,7 +37,11 @@ jobs:
 
   add_quote_valid_token:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -36,11 +49,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
       - name: Start the application
         run: |
           nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Wait for the server to start
+        run: sleep 5  # Даем время серверу на запуск
 
       - name: Add Quote with Valid Token
         run: |
@@ -52,7 +70,11 @@ jobs:
 
   add_quote_invalid_token:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -60,11 +82,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
       - name: Start the application
         run: |
           nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Wait for the server to start
+        run: sleep 5  # Даем время серверу на запуск
 
       - name: Add Quote with Invalid Token
         run: |
@@ -76,7 +103,11 @@ jobs:
 
   update_quote_valid_token:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -84,11 +115,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
       - name: Start the application
         run: |
           nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Wait for the server to start
+        run: sleep 5  # Даем время серверу на запуск
 
       - name: Update Quote with Valid Token
         run: |
@@ -100,7 +136,11 @@ jobs:
 
   update_quote_invalid_token:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -108,11 +148,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
       - name: Start the application
         run: |
           nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Wait for the server to start
+        run: sleep 5  # Даем время серверу на запуск
 
       - name: Update Quote with Invalid Token
         run: |
@@ -124,7 +169,11 @@ jobs:
 
   delete_quote_valid_token:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -132,11 +181,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
       - name: Start the application
         run: |
           nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Wait for the server to start
+        run: sleep 5  # Даем время серверу на запуск
 
       - name: Delete Quote with Valid Token
         run: |
@@ -146,7 +200,11 @@ jobs:
 
   delete_quote_invalid_token:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -154,11 +212,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
       - name: Start the application
         run: |
           nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Wait for the server to start
+        run: sleep 5  # Даем время серверу на запуск
 
       - name: Delete Quote with Invalid Token
         run: |
