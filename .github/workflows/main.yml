@@ -1,73 +1,167 @@
-name: API Tests
+name: Quote API Requests
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  test-api:
+  random_quote:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Set up Python (for testing purposes if needed)
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
-      - name: Run API Tests
+      - name: Install dependencies
         run: |
-          # Set up environment variables or use secrets for the token
-          SECRET_TOKEN="your_secret_token"
-          INVALID_TOKEN="invalid_token"
-          BASE_URL="http://127.0.0.1:8000"
+          pip install -r requirements.txt
 
-          # Test: GET Random Quote
-          echo "Running GET random_quote test"
-          curl -X GET "$BASE_URL/random_quote" -H "Accept: application/json"
-          
-          # Test: POST Add Quote (correct token)
-          echo "Running POST add_quote with correct token"
-          curl -X POST "$BASE_URL/add_quote" -H "Accept: application/json" -H "Content-Type: application/json" -H "x-token: $SECRET_TOKEN" -d '{
-            "text": "Тестовая цитата для добавления.",
-            "author": "Автор Теста",
-            "theme": "Тест"
-          }'
+      - name: Start the application
+        run: |
+          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
-          # Test: POST Add Quote (incorrect token)
-          echo "Running POST add_quote with incorrect token"
-          curl -X POST "$BASE_URL/add_quote" -H "Accept: application/json" -H "Content-Type: application/json" -H "x-token: $INVALID_TOKEN" -d '{
-            "text": "Тестовая цитата с неправильным токеном.",
-            "author": "Автор Теста",
-            "theme": "Тест"
-          }'
+      - name: Get Random Quote
+        run: |
+          curl -X GET "http://127.0.0.1:8000/random_quote" -H "Accept: application/json"
 
-          # Test: PUT Update Quote (correct token)
-          echo "Running PUT update_quote with correct token"
-          curl -X PUT "$BASE_URL/update_quote/1" -H "Accept: application/json" -H "Content-Type: application/json" -H "x-token: $SECRET_TOKEN" -d '{
-            "text": "Обновленная тестовая цитата.",
-            "author": "Обновленный Автор",
-            "theme": "Обновленный Тест"
-          }'
+  add_quote_valid_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-          # Test: PUT Update Quote (incorrect token)
-          echo "Running PUT update_quote with incorrect token"
-          curl -X PUT "$BASE_URL/update_quote/1" -H "Accept: application/json" -H "Content-Type: application/json" -H "x-token: $INVALID_TOKEN" -d '{
-            "text": "Тестовая цитата с неправильным токеном для обновления.",
-            "author": "Автор Теста",
-            "theme": "Тест"
-          }'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-          # Test: DELETE Delete Quote (correct token)
-          echo "Running DELETE delete_quote with correct token"
-          curl -X DELETE "$BASE_URL/delete_quote/1" -H "Accept: application/json" -H "x-token: $SECRET_TOKEN"
+      - name: Start the application
+        run: |
+          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
-          # Test: DELETE Delete Quote (incorrect token)
-          echo "Running DELETE delete_quote with incorrect token"
-          curl -X DELETE "$BASE_URL/delete_quote/1" -H "Accept: application/json" -H "x-token: $INVALID_TOKEN"
+      - name: Add Quote with Valid Token
+        run: |
+          curl -X POST "http://127.0.0.1:8000/add_quote" \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -H "x-token: your_secret_token" \
+          -d '{"text": "Тестовая цитата для добавления.", "author": "Автор Теста", "theme": "Тест"}'
+
+  add_quote_invalid_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Start the application
+        run: |
+          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Add Quote with Invalid Token
+        run: |
+          curl -X POST "http://127.0.0.1:8000/add_quote" \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -H "x-token: invalid_token" \
+          -d '{"text": "Тестовая цитата с неправильным токеном.", "author": "Автор Теста", "theme": "Тест"}'
+
+  update_quote_valid_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Start the application
+        run: |
+          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Update Quote with Valid Token
+        run: |
+          curl -X PUT "http://127.0.0.1:8000/update_quote/1" \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -H "x-token: your_secret_token" \
+          -d '{"text": "Обновленная тестовая цитата.", "author": "Обновленный Автор", "theme": "Обновленный Тест"}'
+
+  update_quote_invalid_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Start the application
+        run: |
+          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Update Quote with Invalid Token
+        run: |
+          curl -X PUT "http://127.0.0.1:8000/update_quote/1" \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -H "x-token: invalid_token" \
+          -d '{"text": "Тестовая цитата с неправильным токеном для обновления.", "author": "Автор Теста", "theme": "Тест"}'
+
+  delete_quote_valid_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Start the application
+        run: |
+          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Delete Quote with Valid Token
+        run: |
+          curl -X DELETE "http://127.0.0.1:8000/delete_quote/1" \
+          -H "Accept: application/json" \
+          -H "x-token: your_secret_token"
+
+  delete_quote_invalid_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Start the application
+        run: |
+          nohup uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
+
+      - name: Delete Quote with Invalid Token
+        run: |
+          curl -X DELETE "http://127.0.0.1:8000/delete_quote/1" \
+          -H "Accept: application/json" \
+          -H "x-token: invalid_token"
