@@ -30,7 +30,12 @@ jobs:
           uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
-        run: sleep 5  # Даем время серверу на запуск
+        run: |
+          # Ждем, пока сервер не станет доступен
+          until curl -s http://127.0.0.1:8000; do
+            echo "Ожидаем запуск сервера..."
+            sleep 2
+          done
 
       - name: Get Random Quote (Test GET)
         run: |
@@ -61,7 +66,12 @@ jobs:
           uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
-        run: sleep 5  # Даем время серверу на запуск
+        run: |
+          # Ждем, пока сервер не станет доступен
+          until curl -s http://127.0.0.1:8000; do
+            echo "Ожидаем запуск сервера..."
+            sleep 2
+          done
 
       - name: Add Quote with Valid Token (Test POST)
         run: |
@@ -96,7 +106,12 @@ jobs:
           uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
-        run: sleep 5  # Даем время серверу на запуск
+        run: |
+          # Ждем, пока сервер не станет доступен
+          until curl -s http://127.0.0.1:8000; do
+            echo "Ожидаем запуск сервера..."
+            sleep 2
+          done
 
       - name: Add Quote with Invalid Token (Test POST)
         run: |
@@ -131,7 +146,12 @@ jobs:
           uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
-        run: sleep 5  # Даем время серверу на запуск
+        run: |
+          # Ждем, пока сервер не станет доступен
+          until curl -s http://127.0.0.1:8000; do
+            echo "Ожидаем запуск сервера..."
+            sleep 2
+          done
 
       - name: Update Quote with Valid Token (Test PUT)
         run: |
@@ -166,7 +186,12 @@ jobs:
           uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
-        run: sleep 5  # Даем время серверу на запуск
+        run: |
+          # Ждем, пока сервер не станет доступен
+          until curl -s http://127.0.0.1:8000; do
+            echo "Ожидаем запуск сервера..."
+            sleep 2
+          done
 
       - name: Update Quote with Invalid Token (Test PUT)
         run: |
@@ -201,7 +226,12 @@ jobs:
           uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
-        run: sleep 5  # Даем время серверу на запуск
+        run: |
+          # Ждем, пока сервер не станет доступен
+          until curl -s http://127.0.0.1:8000; do
+            echo "Ожидаем запуск сервера..."
+            sleep 2
+          done
 
       - name: Delete Quote with Valid Token (Test DELETE)
         run: |
@@ -234,7 +264,12 @@ jobs:
           uvicorn main:app --reload &  # Запускаем сервер в фоновом режиме
 
       - name: Wait for the server to start
-        run: sleep 5  # Даем время серверу на запуск
+        run: |
+          # Ждем, пока сервер не станет доступен
+          until curl -s http://127.0.0.1:8000; do
+            echo "Ожидаем запуск сервера..."
+            sleep 2
+          done
 
       - name: Delete Quote with Invalid Token (Test DELETE)
         run: |
